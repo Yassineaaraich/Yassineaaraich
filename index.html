@@ -1,83 +1,65 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<!doctype html>
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Services Website</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تطبيق الأفلام</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body{margin:0;background:#0f1724;color:#e6eef8;font-family:"Segoe UI",Tahoma,Arial}
+    .container{padding:20px;max-width:1200px;margin:0 auto}
+    .grid{display:grid;gap:12px;grid-template-columns: repeat(2,1fr);}
+    @media(min-width:640px){.grid{grid-template-columns: repeat(3,1fr);}}
+    @media(min-width:1000px){.grid{grid-template-columns: repeat(4,1fr);}}
+    .card{background:#0b1220;border-radius:12px;overflow:hidden;cursor:pointer;transition:.3s;text-decoration:none;color:inherit}
+    .card:hover{transform:translateY(-6px)}
+    .poster{width:100%;aspect-ratio:2/3;object-fit:cover}
+    .card-body{padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+    .title{font-size:14px;font-weight:700}
+    .meta{font-size:12px;color:#98a0b3;display:flex;justify-content:space-between;flex-wrap:wrap}
+    .badge{background:rgba(255,255,255,0.08);padding:4px 6px;border-radius:8px;font-size:12px;margin:2px}
+    header{padding:14px;display:flex;align-items:center;gap:10px;background:#0003}
+    .logo{width:44px;height:44px;border-radius:10px}
+  </style>
 </head>
 <body>
- <header>
+  <header>
+    <img src="BN.jpg" class="logo" alt="logo">
+    <strong>BOOM NOUR</strong>
+  </header>
 
-        <div class="logo">
+  <main class="container">
+    <div id="moviesGrid" class="grid"></div>
+  </main>
 
-            <img alt="Logo" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgfk3r0TOQ-q5Y43bY4R-zeOU-gjx7h6NgYUZwprxhLMDa5vk22Ardzp4VWBpmj68uV-9uZNXglrVZL7_rm2HI4sfgJLfWhF3CpBDfVAlu-al0UyExfjFToCFmGQeoeHaDHJ_j4_jj4ybQeaVDt8ZNuhdo8ah3jDDb9U3KzPSkxalAAXBMfpQsnMgH8BVPW/s398/20240605_013202712.png" />
+  <script>
+    async function loadMovies(){
+      const [dataRes, titlesRes] = await Promise.all([
+        fetch('movies_data (4).json'),
+        fetch('movies_titles.json')
+      ]);
+      const data = await dataRes.json();
+      const titles = await titlesRes.json();
+      const grid = document.getElementById('moviesGrid');
 
-        </div>
+      grid.innerHTML = data.map((m,i)=>{
+        const title = titles[i] || 'بدون عنوان';
+        return `
+          <a href="watch.html?id=${i}" class="card">
+            <img src="${m.image}" class="poster" alt="${title}">
+            <div class="card-body">
+              <div class="title">${title}</div>
+              <div class="meta">
+                <span>⭐ ${m.rating || 'N/A'}</span>
+                <span>${(m.categories||[]).map(c=>`<span class='badge'>${c}</span>`).join('')}</span>
+              </div>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
 
-        <div class="language-switch">
-
-            
-
-        </div>
-
-    </header>
-
-    <nav>
-
-        <ul>
-
-            <li><a href="#home">Home</a></li>
-
-            <li><a href="#about">About Me</a></li>
-
-            <li><a href="#contact">Contact</a></li>
-
-        </ul>
-
-    </nav>
-
-<div>
-
-  <img class="jon" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYE4HfeZQfzenQCxm14TOgoIL4hMa2wltGeATNY2QenKhWlADoowv0zAKIjIK5iBit6qmSiJcxDQcpyKFnzKcbQ4snFc9pRUyuRq8C2lGP4qEHohYiyQGDQPZCODlCRd7P2YrSX-tR0g1ar8eSJYTXh2gYkYY9pnUwEzmOxZHNwera64JT0NPnWNqOOanI/s2245/2.png"/>
-
-  
-
-</div>
-
-     <main>
-
-        <section id="background-removal">
-
-            <h2>Background Removal</h2>
-
-            <img alt="Background Removal" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHkdF9JzOa8_P4nUjY_jbN2iDyWOQRuZUm1ETPzLzUXV6S_Vcpa2ueQST0ca53pqXIRLu124oua5SqDsv78uRtcdyLTwQ9ndKsT364ZT4PQNJG1Dy9wRSkeANknXpLdTWJ_ZHhK_4Fj3CGoSJ4eNA2VjpNUEfCxU6xD323_XZI6I7dAUxSEGb30-12GTZx/s128/2355864.png" />
-
-            <p>This service helps you easily and quickly remove image backgrounds, It also works AI.</p>
-
-             <a class="btn" href="testtwn.html">start service.</a>
-
-   </section>
-        <section id="speech-to-text">
-            <h2>Image Format Converter</h2>
-            <img alt="Speech to Text" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-t2Z_WVwqWuSs6o-PbBKuSp3O7QfDgsOzaK_0YlxVi7IKdureMt4vb4hrWYYzd3O0GuqsyhCZvrXhOcW47rIg_seygLYdLs9cBT0LDSR_i2CIgK2Ue1lkvSu1wQYsoQCmxu1aiKCIHxvWHHJXxDuK-PMW8GyWtUddtqWDneKSqp0lRtEmjCmUvlXE9olt/s128/422950.png" />
-            <p>while changing the image format converts it between formats like JPEG and PNG to preserve quality or reduce size.</p>
-            <a class="btn" href="index.html">start service.</a>
-
-        </section>
-        <section id="text-to-speech">
-            <h2>Resize Your Image</h2>
-            <img alt="Text to Speech" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTnRuU03BrlrNTKK5rK1c2xhuobpBO0VHDfiEOPaVt95v6AEoIeQuZW6sya76tH3G7Rltw-yo30ThEHoiQ9P_6gzKU5Vnqm6uUDTUsrVhcl8MA2wj6C8DJLAfuGQppV_1GCwMuXRE6IRanndEmzI63OLaKiTOBejUc1MTUzqVpSH-jmr_15BspqCWD_9Iw/s128/9850776.png" />
-
-            <p>Resizing images aims to adjust their dimensions for performance or compatibility</p>
-            <a class="btn" href="tont.html">start service.</a>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2024 All rights reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
+    loadMovies();
+  </script>
 </body>
 </html>

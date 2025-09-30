@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تفاصيل الفيلم</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body{background:#0f1724;color:#e6eef8;font-family:"Segoe UI",Tahoma,Arial;margin:0}
+    header{padding:14px;display:flex;align-items:center;gap:10px;background:#0003}
+    .logo{width:44px;height:44px;border-radius:10px}
+    main{padding:20px;max-width:900px;margin:0 auto;}
+    .poster{width:100%;max-width:280px;aspect-ratio:2/3;object-fit:cover;border-radius:10px}
+    .details{margin-top:20px}
+    .title{font-size:22px;font-weight:700;margin-bottom:8px}
+    .badge{background:rgba(255,255,255,0.08);padding:4px 8px;border-radius:8px;font-size:13px;margin-inline-end:6px}
+    iframe{width:100%;height:500px;border:0;border-radius:12px;margin-top:20px}
+    .full-btn{margin-top:10px;padding:10px 14px;border-radius:8px;border:0;cursor:pointer;background:#ff6b6b;color:#fff;font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="BN.jpg" class="logo" alt="logo">
+    <strong>BOOM NOUR</strong>
+    <a href="index.html" style="margin-right:auto;color:#fff;text-decoration:none">الصفحة الرئيسية</a>
+  </header>
+
+  <main id="content">تحميل...</main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get('id'));
+
+    async function loadMovie(){
+      const [dataRes, titlesRes, servicesRes] = await Promise.all([
+        fetch('movies_data (4).json'),
+        fetch('movies_titles.json'),
+        fetch('service_movies.json')
+      ]);
+      const data = await dataRes.json();
+      const titles = await titlesRes.json();
+      const services = await servicesRes.json();
+
+      const movie = data[id];
+      const title = titles[id];
+      const service = services.find(s => s.title === title);
+
+      if(!movie){
+        document.getElementById('content').innerHTML = 'الفيلم غير موجود';
+        return;
+      }
+
+      document.getElementById('content').innerHTML = `
+        <img class="poster" src="${movie.image}" alt="${title}">
+        <div class="details">
+          <div class="title">${title}</div>
+          <div>${(movie.categories||[]).map(c=>`<span class="badge">${c}</span>`).join('')}</div>
+          <div>⭐ التقييم: ${movie.rating || 'N/A'}</div>
+        </div>
+        ${service ? `<iframe id="player" src="${service.embed_url}" allowfullscreen></iframe>` : '<p>لا يوجد سيرفر</p>'}
+        ${service ? `<button class="full-btn" onclick="openFull('${service.embed_url}')">عرض كامل</button>` : ''}
+      `;
+    }
+
+    function openFull(url){
+      const win = window.open(url, '_blank');
+      win.focus();
+    }
+
+    loadMovie();
+  </script>
+</body>
+</html>
